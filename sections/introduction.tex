@@ -1,0 +1,46 @@
+\section{Introduction}
+
+
+% What 
+% |- Will be developing and evaluating a system that permits the user to interact with their phone hands-free / one-handed
+%
+% Why
+% |- Situationally Induced Impairments and Disabilities (SIIDs)
+% |  | Scenarios where user is suffering some affliction induced by the environment they're operating within, and as such
+% |  |  they are either unable to or have less ability to perform a task using their phone
+% |
+% |- One-Handed use of a phone is common [Is this a valid statement?]
+% |  | For simple tasks, you don't need to use more than one input via the touch-screen (e.g. just thumb)
+% |  | Larger phone screen sizes impact usability of single-handed input (via thumb) [thumb reachability studies]
+% |  |- Phone/grip shifting
+% |- Issues of 1 handed usage (thumb reachability)
+
+
+% Look at https://faculty.washington.edu/wobbrock/pubs/Wobbrock-2015.pdf
+
+% Phone screens are getting larger
+%  screen usability goes down with screen-size, unless two-handed interaction is enforced, or device supported externally
+%  people prefer one-handed, even when not encumbered
+
+Modern smartphone\footnote{We are using this term to mean mobile devices that utilise a touch-screen and have internet connectivity, and can be extended to also include tablets.} screens have been increasing in size over the last few years\cite{xuesheng2018research}.
+In stationary contexts, when you are able to support the phone or use two-handed, this can increase the speed and accuracy of performing tasks via the touch interface\cite{tsai2017testing}.\\
+However adverse to the trend of increasing screen size, there is a tendency to interact with the phone one-handed\cite{hoober2013users}, which does not afford optimal reachability of the full screen for the thumb for interactions\cite{le2018fingers}.
+\\\\
+One approach to increase usability is to add gestures and/or accept additional input modalities.
+
+Given we already have the touchscreen, we can look to include touch gestures that utilise the user's thumb\cite{{hakka2020design, lai2019thumbstroke}}.
+These are implemented by some systems already, such as being able to double-tap and drag to change the zoom of a photo in Google Photos.
+However swiping gestures on the touch-screen are becoming more widely adopted within smartphones to support specific actions, such as navigation, and cannot be utilised\cite{hueber2020headbang}.
+% Why bad?
+
+Gaze can be utilised to identify where a user is focusing, such that input can be centred on their attention, however typically gaze tracking requires special hardware to accurately track eyes and understand where user is looking\cite{voelker2020headreach}.
+
+Head tracking can however be used as an approximation to gaze, utilising the user's head-pose relative to the phone to indicate direction\cite{{onuki2016combined, gorodnichy2002importance}}, and support additional gestures to be used in conjunction with touch to extend the actions the user can perform.
+\\\\
+A second approach is to have an adaptive user interface (AUI) which can react to the user to aid them in completing their goals\cite{wesson2010can}.
+
+These can adapt by either adjusting the UI elements in response to some context, such as what task their performing, or what element they are focusing on\cite{pfeuffer2021artention}.
+
+Or this can be achieved by extending the UI in the third dimension and having the UI adjust to the user's perspective\cite{francone2011using}.
+\\\\
+The goal of this project will be to develop a system that adapts the interface based on user context, primarily driven by user perspective, and which supports the use of head gestures to aid in interaction with larger screens; building upon the prior works we shall discuss in the literature review below.
