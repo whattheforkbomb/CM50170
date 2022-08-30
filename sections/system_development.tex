@@ -1,14 +1,84 @@
-\section{System Development} % < 1.5 Pages
+\section{Methodology} % < 1.5 Pages
 
-% \subsection{Design}
+% Distinguishing Between Head and Phone Movement (Methodology)
+%   Redefine goals of the system/research objectives
+%   Rough outline of the technology we aim to use?
+%   Outline data we need
+
+This section details the process undertaken to develop the system which can meet the goal (outlined in the Introduction): distinguishing between head and phone based gestures on a smartphone.
+\\\\
+In order to develop the aforementioned system we opted to take a data-driven approach. The benefit of taking a data-driven approach is that we can leverage Machine Learning, and train the system with exemplar data, rather than needing to manually determine the features and derive the algorithm needed to accomplish our goal.
+
+\input{sections/data_collection}
+
+\subsection{Data Post-Processing}
+Before being able to use the data for training, we needed to synchronise the data recorded from the smartphone, and the fbx data from the MoCap studio.
+To do this we derived the acceleration of the phone based on the MoCap data to find where it meets/exceeds the magnitude of the shake recorded by the app. From this we can determine the frame of the fbx data that corresponds to the recorded timestamp. We can determine the frame for any subsequent timestamp based on the known frame-rate of 60fps. 
+To verify the data didn't drift we resync the data based on the other 2 recorded shakes, verifying that they're within 10 frames of the expected frame. In doing this verification, we did not come across any recording wherein subsequent shakes were not found to be at the expected frame.
+
+Synchronisation and post-processing of the fbx data was performed with Blender and Python.
+Blender was used as permitted viewing the fbx data and verify derived location, roll, pitch, and yaw were correct. Also only way I was able to access the fbx data programmatically.
+Synchronised data was exported to CSVs for each motion recording, containing a path to the image, the raw IMU data, and the derived MoCap data.
+% Link to script used.
+
+% How data from study processed in preparation for usage for training
+% Should this go under the system design?
+
+% Synchronisation Notes
+% Missing earable data!!
+% participants 5 & 6 have head and phone labels swapped
+% participant 3 has initial shake prior to mocap recording, actually start is frame -320
+% data exported to cm
+% some scenes missing images, or only have several images, and as such have no synced data.
+% Converting yuvbytes to rgb
+
+% Data augmentation
+%   - Over-Cranking (Window-Warping?)
+To increase the amount of effective data we have for training we shall do some fps scaling, such that we copy the data, but assuming we're only capturing images every $X$fps. We will find the photo closest to the new frame where it would have been captured, and average appropriate data (such as acceleration).
+
+We will also slice the data in overlapping chunks (at least for the RNN model).
+
+
+% script.processor.process_data('G:/Study/7', 1900)
+% script.processor.process_data('G:/Study/6', 8900)
+% script.processor.process_data('G:/Study/5', 9500)
+% script.processor.process_data('G:/Study/4', 900)
+% script.processor.process_data('G:/Study/3', 20000)
+% script.processor.process_data('G:/Study/2', -320, attempt_0_override=-320)
+% script.processor.process_data('G:/Study/1', 1000)
+% script.processor.process_data('G:/Study/0', 3000)
+
+\subsection{The Proposed Models} % TODO: Drop /s if only one model % The Proposed System
 % App design (maybe some plant uml diagrams in appendix?)
+% Models built
 % Produce either: regression model, able to predict orientation diff between face and phone (based on zeroed orientation); or classifier, able to predict the motion performed (e.g. head turn, phone moved, etc... without need for getting components of either) or to predict whether the observed head orientation is due to head or phone movement, then add some logic to determine which action given observed gesture + cause.
 % need MoCap data to train regression model as need to know actual head orientation.
 %
+To achieve our goal we opted to train 2 models with which we could evaluate and compare performance.
+The first is a cascading classifier which predicts the motion being performed given a sequence of data.
+It first identifies if a face is present in an image via a CNN which returns a bounding box of the face\cite{yu2022yunet}. If a bounding box is present the pixels within the box are passed to another CNN which extracts the position of 68 landmarks of the face\cite{guobing2021headpose}.
+These landmarks, the bounding box location, the average IMU data since the last image, and the last $X$ frames are then passed into an RNN we trained to classify the gesture.
+If no bounding box or landmarks are found for a given image, zeros are provided \tempnote{or previous data?}.
+\tempnote{is input going to be padded with zeros for first frames / last frames, or require certain number of frames before attempting classification?}\\
+The second model is 2 models which will be trained to predict the direction of movement in each of the 6 DoF for the head and phone (the head model will also take the landmarks and bounding box as input).
+It will output as a 2d one-hot encoded array, each row being the Degree of Freedom, the column being the direction (0 = stationary, -1 = negative, +1 = positive).
+The output of the 2 can then be fed into a HMM trained to predict the gesture performed based on the derived motion. (possibly an RNN if easier)
 
-% \subsection{Development}
+% What models have been used for cascading (facial landmark and YuNet CNNs)
+
 % Tools, issues
 
-% Training
+\subsubsection{Training}
+% Breakdown of samples (train, validation, test), and count
+% K-Fold validation
+% Hyper-params
+% Image input sizes
 
-\subsection{Evaluation}
+
+\subsubsection{Model Evaluation}
+% Confusion Matrices
+% compare models
+
+\subsection{Model Deployment}
+% How the models will be used (Android App using TFLite (and OpenCV?))
+

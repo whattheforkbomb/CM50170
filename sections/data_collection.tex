@@ -1,30 +1,74 @@
-\section{Data Collection Methodology} % < 1.5 Pages
+\subsection{Data Collection Study} % < 1.5 Pages
+% Data Collection Study
+%   - Study design
+%   - Application Design
+%   - Data Post-Processing
+%   - Study Data
+%     Study was run between..., containing 8 participants (gender breakdown?), unfortunately did not record ethnicity or ages
+%     Issues with data (Missing earbud IMU data, some takes missing (not images saved))
+%     Study data breakdown (graphs and observations)
 
-\subsection{Data Collection Application}
-% App design (maybe some plant uml diagrams in appendix?)
-% Tools, issues
+% start with outline of the study before any subsequent headings, e.g. what is the design
+% Outline data required?
 
-\subsection{Study}
-% How is data collected, participants recruited, participant breakdown/stats
+For a data-driven approach to work we need to first determine what data we need to collect in order to train our system. We have identified the following types of data:
+\begin{description}
+    \item[Images From The Front Facing Camera] Given the majority of papers we reviewed \tempnote{Citations again?} utilise a camera to track the user's face, from which they can derive the gestures, we feel it necessary to do the same.
+    \item[Smartphone Acceleration Data] To understand whether the smartphone's PoV is changing we need to know how it is moving. 
+    \item[Head Acceleration Data] If we can determine the movement of the smartphone via acceleration data, it is reasonable to see if we can also do the same with the user's head.
+    \item[Actual Head and Phone Pose (Ground-Truth)] In order to accurately train one models we propose below, we will need some Ground-Truth data.
+\end{description}
 
-\subsection{Data Post-Processing}
-% Some stats on the data?
+With these data-types we can then build-up a dataset by recording each of the data-types during the performance of a series of gestures. Knowing the gesture associated to the recorded data will allow us to then train our system to recognise the gestures based on the data.
 
-% How data from study processed in preparation for usage for training
-% Should this go under the system design?
+To create the required dataset we decided upon 11 gestures, each with 2-8 variations (effectively directions the gesture could be performed in), resulting in a total of 44 distinct motions to obtain samples of. A table of the gestures and variations can be found under \autoref{app:gestures}.
 
-% Synchronisation Notes
+\subsubsection{Apparatus and Techniques}
+Given the data types listed above, we decided to use the following tools:
+\begin{enumerate}
+    \item \textbf{Pixel 4a} - An Android Smartphone with Bluetooth, a front-facing camera, and an IMU
+    \item \textbf{eSense Earable} - A Bluetooth Earbud with an IMU
+    \item \textbf{CAMERA Motion Capture Studio} - A Motion Capture (MoCap) studio found on campus within the University of Bath
+\end{enumerate}
+The smartphone and earbud (when paired via bluetooth) will be able to provide the first three data-types defined above. While the Ground-Truth data can then be supplied by the MoCap studio.
+\\\\
+To collect the data we developed an application to run on the smartphone. 
+% Need this?
+This was developed in Kotlin\footnote{A programming language that runs on the JVM and is used to develop applications for Android.} and the Android SDK.
+The application was designed to show participants a motion (a gesture and direction/variation) to perform. This is detailed in text, images, and a video. \tempnote{Include figures to show this (spread accross columns at top of page?)}
+The participant would then be asked to perform this motion after pressing a record button. While recording the app would do the following:
+\begin{itemize}
+    \item Capture images as frequently as possible from the front-facing camera, saving them as raw YUV bytes, with the UTC timestamp as the name.
+    \item Record the smartphone IMU data (linear and angular accelerations), saving them to a csv with the UTC timestamp.
+    \item Record the earbud IMU data (linear and angular accelerations), saving them to a csv with the UTC timestamp.
+\end{itemize}
+% Link to class diagram, or do we just want photos?
+Once the participant has finished with the motion they could press the same button to stop the recording. Otherwise the recording will automatically terminate after 10 seconds, since the gestures shouldn't take more than a couple seconds to perform and the phone has limited RAM and storage with which to save data.
+To prevent accidentally stopping the recording too soon, say by accidentally double-tapping the screen, we disable the button for 2 seconds.
+
+Once a motion has been recorded, the app shows the participant the next motion to perform. When the participant completes the final motion to perform, the app returns to the first motion. This repeats two times, such that each motion is captured 3 times. This is to collect variance in each motion for each participant.
+\\\\
+In order to collect the Ground-Truth data, the study was performed within the MoCap studio. The participant was asked to wear hat that had a motion-tracker attached, such that the tracker was placed around the middle of the back of their head. An exact position wasn't important as we only needed to determine the relative movement of their head, rather than the exact position.
+The smartphone was then tracked via a motion tracker attached to a 3D-printed mount, such that the tracker would not affect the participant's grip on the phone, or interfere with the images captured from the front-facing camera.\tempnote{Include figure to show this}
+Each tracker was composed of 5 points. 3 were positioned such that they formed a right-angle triangle, allowing the orientation of the tracker to be derived. The other 2 points were there to improve tracking accuracy, and help make the trackers unique and distinguishable.
+The MoCap system would track each of the 10 points at 60 fps and export the data as an fbx file.
+
+In order to later synchronise the data collected we required the user to shake the smartphone, with a force of at least 2G, prior to beginning each round of 44 motions. The app would record the shake magnitude (in the X, Y, and Z axis) and the UTC timestamp of when it happened.
+\\\\
+The full study protocol can be found under \autoref{app:protocol}
+
+\subsubsection{Study Results}
+Our study was run with 8 participants.
+
+Unfortunately due to an issue with the application, the earbud IMU data was not recorded, despite the earbud being on and paired with the phone. This was not caught until after the study was completed.
+
+Due to a late start, and overrunning into the next participant's slot, participant 0 was unable to complete their 3\textsuperscript{rd} round of motions.
+
+Some participants didn't initially stop recording upon completing a motion, as such their initial motions have superfluous frames that don't contain data relevant to the motion they're recorded for.
+
+\tempnote{Stats from the data, including figs and tables? Range of motion per gesture. Time taken by gesture and participant, Average sample rate for IMU and Images, Average Number of frames containing face by participant and gesture}
+% When Performed, Participants recruited, participant breakdown/stats
 % Missing earable data!!
-% participants 5 & 6 have head and phone labels swapped
-% participant 3 has initial shake prior to mocap recording, actualy start is frame -320
-% data exported to cm
-% some scenes missing images, or only have several images, and as such have no synced data.
-%
-% script.processor.process_data('G:/Study/7', 1900)
-% script.processor.process_data('G:/Study/6', 8900)
-% script.processor.process_data('G:/Study/5', 9500)
-% script.processor.process_data('G:/Study/4', 900)
-% script.processor.process_data('G:/Study/3', 20000)
-% script.processor.process_data('G:/Study/2', -320, attempt_0_override=-320)
-% script.processor.process_data('G:/Study/1', 1000)
-% script.processor.process_data('G:/Study/0', 3000)
+
+% Some participants didn't stop recording, contain misc frames
+% Some stats on the data?
