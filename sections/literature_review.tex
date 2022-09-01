@@ -47,28 +47,28 @@ In this section we will review existing literature to build an understanding of:
 
 Given our goal is to develop a means to distinguish head and phone gestures on smartphone devices, we first need to understand the gesture's we want to recognise and distinguish.
 Here we will look at existing literature that outline the head and phone gestures you would expect to use while interfacing with a smartphone.
-
+\\\\
+% Mention classes defined > mention ignore 2 as unrelated to head-gestures > explain exemplars of each type > Summary suggesting multiple employed by each system?
+% Mention classes defined and list > mention ignore 2 as unrelated to head-gestures > describe several exemplars and what style/s they fit into?
+% Mention classes defined and list > mention ignore 2 as unrelated to head-gestures > describe how in our review of literature that we classify as pointing/cursor manipulation vs semaphoric (gesture maps to action)
+%
 % https://eprints.soton.ac.uk/261149/1/GestureTaxonomyJuly21.pdf
 % Breakdown the relevant gestures
-
-Gestures can be classified into 5 classes\cite{karam2005taxonomy}:
+After a review of gestures utilised within Human Computer Interaction literature \citeauthor{karam2005taxonomy} define five distinct classes with which we can differentiate between types of gestures utilised by the systems proposed in the literature\cite{karam2005taxonomy}:
 \begin{description}
-    \item[Dietic] These are gestures that involve pointing, and mapping this to either a specific object or location within the interface.
+    \item[Dietic] Gestures that involve pointing, and mapping this to either a specific object or location within the interface.
     \item[Manipulative] A gesture which indicates intent to manipulate some object.
     \item[Semaphoric] Gestures which map to a specific action or intent.
     \item[Gesticulative] Typically accompany speech, but not required to transfer meaning.
     \item[Language] A substitute to written or verbal language.
 \end{description}
-% For the purposes of this project, we shall be intending to review Dietic, Manipulative, and Semaphoric gestures to support user interaction.
-Of these gesture classes only Dietic, Manipulative, and Semaphoric can be applied to head gestures.
 
-% Look at phone gestures as well, e.g. shaking the phone in a given direction.
-
+In our review of head/phone gesture systems we found that none utilised the Language or Gesticulative gesture styles, which is to be expected as we were focusing on gestures for control and interaction rather than for communication.
+Of the 3 remaining gesture styles, we noted that systems rarely utilised a single gesture style. Either due to the gestures themselves being viewable as multiple gesture styles, being both semaphoric and manipulative, or by actively including different styles of gestures,such as pointing to a region, then using a sempahoric gesture to trigger an action.
 % detail examples showing the gestures they decided upon, and why.
 % example the types of gestures
 % how might a phone gesture differ from head
 % why might they look the same?
-
 % yan2018headgesture, they explored existing head gestures (maybe focusing on those trackable via IMU over other methods?). Their study resulted in details shown in figure
 \begin{figure}
     \centering
@@ -76,19 +76,28 @@ Of these gesture classes only Dietic, Manipulative, and Semaphoric can be applie
     \caption{\label{fig:yan2018headgesture_proposed_gestures} Proposed head gestures and their corresponding actions\cite{yan2018headgesture}.}
     \Description[9 diagrams depicting the gestures proposed by \citeauthor{yan2018headgesture}]{9 diagrams depicitng the path of the nose taken to perform each gesture proposed by \citeauthor{yan2018headgesture}.} % Expand on this
 \end{figure}
-An example of this can be seen in the work of \citeauthor{yan2018headgesture} who propose 9 gestures (\autoref{fig:yan2018headgesture_proposed_gestures}) and utilise the IMU embedded within the Hololens\cite{yan2018headgesture}.
-
-The gestures they propose were derived from a study wherein they asked participants to suggest head movements that they believed corresponded to the action taken.
-These were then collated by manually into 80 gestures, which were then effectively voted upon by the participants for their respective actions.
+\\\\
+An example of this can be seen in the work of \citeauthor{yan2018headgesture}\cite{yan2018headgesture} who propose 9 head gestures (\autoref{fig:yan2018headgesture_proposed_gestures}), the majority of which are purely semaphoric, however several (such as scrolling, dragging, and zooming) could also be seen as manipulative through the mapped action physically moving the content on screen.
+\citeauthor{yan2018headgesture} derived these gestures through a study wherein participants where asked to proposed a set of head gestures, without being given an associated action. These gestures were then collated manually into a set of 80 gestures, which were then effectively voted upon by the participants for their respective actions.
 The gestures with the most votes for a given action were selected, with some minor adjustments to ensure there were no clashes between actions.
+
+Another system that utilised multiple gestures was EyeMu\cite{kong2021eyemu}, which outline several gestures, that are performed by physically moving the smartphone, to extend user interaction when user is forced to interact with phone single handed.
+As with \citeauthor{yan2018headgesture}'s gestures, most are semaphoric, but can be viewed as manipulative.
+Some map to actual actions, e.g. flicking between items, others are less derivative and have less of a connection to the desired effect, e.g. moving phone closer/further from face to select an item / open a page.
+
+% NOUSE
+Two systems that were purely dietic are Nouse\cite{gorodnichy2004nouse} and a system developed by \citeauthor{varona2008hands}\cite{varona2008hands}, both of which maps the position of the user's nose in images from the front-facing camera to a location on the screen.
+Neither system recognises sequences of motions of the head as gestures, other than recognising blinking and winking, which were recognised as an action to select what was under the cursor. 
+You could also argue that these systems are also manipulative given they show a cursor and as such the head gestures are in an attempt to move the cursor to the relevant location.
 
 % https://projet.liris.cnrs.fr/imagine/pub/proceedings/CVPR2012/data/papers/workshops/W01_05.pdf
 \cite{lopez2012head} utilise a form of Manipulative gestures, wherein the pose of the head is used to either adjust the view of what is on screen, emulating a change in perspective, or by changing the UI (such as opening th ebookmarks bar while looking at a webpage)
 
+% Head bang and reach
+% Initially used to 
+
 % Phone gestures
 % https://dl.acm.org/doi/pdf/10.1145/3462244.3479938
-\citeauthor{kong2021eyemu} outline several gestures to extend user interaction when user is forced to interact with phone single handed (flicking and zooming).
-These would be Manipulative and Semaphoric (some map to actual actions, e.g. flicking between items, others are less derivative and have less of a connection to the desired effect (moving phone closer/further from face.))
 
 \subsection{Head Feature Extraction and Localisation}
 % Head Tracking (From Smartphones)
@@ -152,16 +161,15 @@ During our review of related works we came across several means of localising a 
 
 The least reasonable methods do not bare reviewing due to unrealistic expectations of the population of smartphone users, such as the need for a Motion Capture (MoCap) system\cite{buschel2017investigating} or the use of a Head Mounted Display with a mounted tracking marker\cite{mohr2019trackcap}.
 These may be suitable in specific environments, but are not reasonable in meeting our goal.
-
-More reasonable, yet still in-feasible, involve localising the smartphone relative to the environment.
-
-\tempnote{Picture of features used for camera tracking}
-One method is 'camera tracking', wherein the movement of the camera is estimated through analysis of an image stream from the rear-facing camera\cite{jiang2000camera}. This is a technique common-place in VFX to recreate the path taken by a camera in 3D.
+\\\\
+A more reasonable set of methods involve localising the smartphone's position relative to its environment.
+\tempnote{Picture of features used for camera tracking}\\
+One method is 'camera tracking', wherein the movement of the camera is estimated through analysis of an image stream from the rear-facing camera. This is a technique common-place in VFX to recreate the path taken by a camera in 3D\cite{barber2016camera}, but has also been extended to use in Augmented Reality applications\cite{jiang2000camera}.
 Unfortunately this isn't reasonable to use on current modern mobile phones as they don't all support the ability to capture images from multiple cameras (some via software, others due to hardware limitations). As such we will not be able to utilise the rear camera as the front-camera will be required to track the user's face in our proposed system.
 
 Another solution is the use of either Depth-Cameras (cameras that capture an array representing the distance to something in the environment) or LiDaR (which provides a point cloud of the environment ahead of the phone), and tracking the smartphone's movement through the observed 3D space.
 Unfortunately these require special hardware that isn't available on most smartphones, in particular rear-facing; most depth cameras that exist on modern smartphones are front-facing (such as those used by Apple and Samsung for their Animoji/Memoji and AR Emoji respectively), and the only mainstream phones to provide a LiDaR on the rear of the phone are the iPhone Pros (currently just the 12 and 13 series).
-
+\\\\
 The only method we found to be reasonable and feasible was to record the linear and angular acceleration of a smartphone's Inertial Measurement Unit (IMU)\cite{mantyla2000hand, kratz2013combining, neelasagar2015real, garcia2014contextualized}. 
 An IMU provides the acceleration experienced in the 6 Degrees of Freedom (DoF)\footnote{3 Linear Axis: X, Y, Z, 3 Angular Axis: Yaw, Pitch, Roll (though this can also be expressed as a Quaternion to avoid gimble lock\tempnote{ref here, or just drop Quaternion note?})} the smartphone can be manoeuvred through.
 
