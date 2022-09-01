@@ -10,6 +10,7 @@ These exist on a spectrum with regards to interaction techniques: Using the face
 \\\\
 % The Problem:
 A common issue that afflicts many of these systems/approaches is that they don't distinguish between the movement of the phone or the movement of the user's head. For example, the user moving their head to the left, will be treated the same as the user moving the phone to the right, since from the front-facing camera's perspective it looks like the head is moving in the same way% %(see picture)
+% TODO: Better explanation
 % References (some even note it as a feature, e.g. you can move the phone instead of moving your head)
 This reduces the number of 'recognisable' gestures.
 % Explain this, e.g. can't use head movement as pointer, vs phone movement as gesture
@@ -18,7 +19,7 @@ This reduces the number of 'recognisable' gestures.
 We look to explore whether such a system could distinguish between the user moving their head vs the phone being moved. % How to better phrase this?
 
 % Solution/What We Did:
-In order to develop such a system, a data driven approach was taken.
+In order to develop a proof-of-concept, a data driven approach was taken.
 As such a study was undertaken to collect the camera feed and IMU/Gyro of the smart device, an IMU within an earbud worn by the user, and 3D positioning of the user's head and the smart device via a motion capture stage.
 With the motion capture data being synced to the IMU/Gyro data and photos, a system could be trained to recognise several gestures and learn to distinguish between whether an observed gesture was due to the phone or the user's head moving.
 % How is this system evaluated?

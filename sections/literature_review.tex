@@ -28,7 +28,7 @@ In this section we will review existing literature to build an understanding of:
 
 % Merge last 2 sections into one?
 
-\subsection{Head and Phone Gestures} % Types of Head Gesture
+\subsection{Gesture Classifications and Usage} % Types of Head Gesture
 % Types of Head Gestures (Pointing (Dietic & Manipulative) vs Semaphoric)
 %   Since used by the systems mentioned in the intro, discuss these 3 types
 %   Why would these types of gestures be used, what roles did they serve.
@@ -78,10 +78,20 @@ Of these gesture classes only Dietic, Manipulative, and Semaphoric can be applie
     \Description[9 diagrams depicting the gestures proposed by \citeauthor{yan2018headgesture}]{9 diagrams depicitng the path of the nose taken to perform each gesture proposed by \citeauthor{yan2018headgesture}.} % Expand on this
 \end{figure}
 An example of this can be seen in the work of \citeauthor{yan2018headgesture} who propose 9 gestures (\autoref{fig:yan2018headgesture_proposed_gestures}) and utilise the IMU embedded within the Hololens\cite{yan2018headgesture}.
-% why did they settle on these gestures (reference again later in development)
 
+The gestures they propose were derived from a study wherein they asked participants to suggest head movements that they believed corresponded to the action taken.
+These were then collated by manually into 80 gestures, which were then effectively voted upon by the participants for their respective actions.
+The gestures with the most votes for a given action were selected, with some minor adjustments to ensure there were no clashes between actions.
 
-\subsection{Head and Phone Feature Extraction}
+% https://projet.liris.cnrs.fr/imagine/pub/proceedings/CVPR2012/data/papers/workshops/W01_05.pdf
+\cite{lopez2012head} utilise a form of Manipulative gestures, wherein the pose of the head is used to either adjust the view of what is on screen, emulating a change in perspective, or by changing the UI (such as opening th ebookmarks bar while looking at a webpage)
+
+% Phone gestures
+% https://dl.acm.org/doi/pdf/10.1145/3462244.3479938
+\citeauthor{kong2021eyemu} outline several gestures to extend user interaction when user is forced to interact with phone single handed (flicking and zooming).
+These would be Manipulative and Semaphoric (some map to actual actions, e.g. flicking between items, others are less derivative and have less of a connection to the desired effect (moving phone closer/further from face.))
+
+\subsection{Head Feature Extraction and Localisation}
 % Head Tracking (From Smartphones)
 % How track head, (Front facing camera, )
 % Cascades, need face first, or one model (if using NN/ML solutions)
@@ -93,12 +103,9 @@ An example of this can be seen in the work of \citeauthor{yan2018headgesture} wh
 %   - Optical Flow
 
 % Want to have headings, or just have paragraphs?
-Now that we understand the gestures we want to recognise and differentiate between, we can look at how one could extract head and phone pose. Without knowing the head and phone poses, we can't even try to determine the gesture being performed.
+% TODO: Better intro
+Before being able to distinguish between head and phone gestures, we first need to extract them. To start with we will be reviewing the methods in surrounding literature to extract relevant data required to track head gestures through the use of a smartphone.
 %split this section into both feature extraction and tracking?
-
-\subsubsection{Head Mounted IMU}\nl
-% Included in VR/AR devices, earbuds with embedded IMU
-One of the simpler ways to track the movement of a user's head is with an Inertial Measurement Unit (IMU), as this is a physical device that can be used to measure rotational and linear acceleration.%\footnote{Linear acceleration is typically less accurately tracked compared to angular acceleration (SOURCE!!!!???)}.
 
 
 \subsubsection{HAAR Cascades / The Viola Jones Algorithm}\nl
@@ -116,7 +123,7 @@ Use Greyscale image, and use integral image (summed area table) to apply the fea
 Determine head pitch and yaw (not roll).
 
 % However typically used to narrow down the search space for subsequent logic
-\cite{neto2012real} Also utilise HAAR-like features applied to an integral image, however they utilise a histogram of pixel intensity (amount of variation in a given slice of the image) to identify the eyes.
+\cite{neto2012real} Also utilise HAAR-like features in a classifier, however they simply use this to identify the region of the image that contains a face, and then utilise a histogram of pixel intensity (amount of variation in a given slice of the image) to identify the eyes.
 This is done once during calibration to then extract the eyes (left eye 30\% along the line, right is 70\%) and nose (if the eyes are $d$ far apart, the nose is $d*0.45$ below the midpoint between the eyes), assuming head is upright and user is facing camera.
 
 A downside to the V-J algo is "Informal observation suggests that the face detector can detect faces that are tilted up to about ±15 degrees in plane and about ±45 degrees out of plane (toward a profile view). The detector becomes unreliable with more rotation than this."\cite{viola2004robust}
@@ -128,9 +135,35 @@ A downside to the V-J algo is "Informal observation suggests that the face detec
 % either predict: face exists, Region of image containing face, Derived features of face (size, rotation, landmarks, etc)
 
 % Alternatives???
+\cite{yan2021fast}
 
+% Android MLkit for face detection?
 
-\subsection{Head and Phone Gesture Recognition}\nl
+% Some use HAAR cascades to narrow down region
+% Some alo output similar to HAAR, e.g. bounding box
+% Even open CV, which has had VIOLA-Jones algo built-in now recomends use of CNN (YUNET?) instead of their HAAR classifier
+
+\subsection{Phone Localisation and Tracking}
+% We now have several methods we can refer to in order to determine the head gesture being performed by a user, however we now need to explore the final area in the related works: recognising phone gestures. 
+During our review of related works we came across several means of localising a smartphone / tracking a smartphone's movement, each with varying degrees of feasibility.
+
+The least reasonable methods do not bare reviewing due to unrealistic expectations of the population of smartphone users, such as the need for a Motion Capture (MoCap) system\cite{buschel2017investigating} or the use of a Head Mounted Display with a mounted tracking marker\cite{mohr2019trackcap}.
+These may be suitable in specific environments, but are not reasonable in meeting our goal.
+
+More reasonable, yet still in-feasible, involve localising the smartphone relative to the environment.
+One method is 'camera tracking', wherein the movement of the camera is estimated through analysis of an image stream from the rear-facing camera. This is a technique common-place in VFX to recreate the path taken by a camera in 3D.
+Unfortunately this isn't reasonable to use on current modern mobile phones as they don't all support the ability to capture images from multiple cameras (some via software, others due to hardware limitations). As such we will not be able to utilise the rear camera as the front-camera will be required to track the user's face in our proposed system.
+
+Another solution is the use of either Depth-Cameras (cameras that capture an array representing the distance to something in the environment) or LiDaR (which provides a point cloud of the environment ahead of the phone), and tracking the smartphone's movement through the observed 3D space.
+Unfortunately these require special hardware that isn't available on most smartphones, in particular rear-facing; most LiDar/depth cameras that exist on modern smartphones are front-facing\tempnote{ref samsung and ios face filters/emoji crap}.
+
+The only method we found to be reasonable and feasible was to record the linear and angular acceleration of a smartphone's Inertial Measurement Unit (IMU)\cite{mantyla2000hand, kratz2013combining, neelasagar2015real, garcia2014contextualized}. 
+An IMU provides the acceleration experienced in the 6 Degrees of Freedom (DoF)\footnote{3 Linear Axis: X, Y, Z, 3 Angular Axis: Yaw, Pitch, Roll (though this can also be expressed as a Quaternion to avoid gimble lock\tempnote{ref here, or just drop Quaternion note?})} the smartphone can be manoeuvred through.
+
+Preprocessing (low-pass filtering, rolling average, kalman-filters, gesture segmentation).
+% Discuss segmentation and noise filtering?
+
+\subsection{Gesture Recognition}
 % Head Gesture Recognition
 % How did reviewed systems do this?
 % Given data, how determine gesture performed, e.g. Dietic pointing (use raw data, e.g. calculate screen region/pointer position from data) vs Semaphoric/Manipulative classifying (given data, determine gesture performed)
@@ -140,25 +173,40 @@ A downside to the V-J algo is "Informal observation suggests that the face detec
 %       - given a sequence, what class does it belong to?
 %   - Markov Chain
 %       - Given current state and new input, what is the new state?
+Knowing how we can obtain facial features and the 'pose' of the user's head through a front-facing camera, and the localisation of the smartphone itself, the next step is to be able to recognise gestures performed by the user with either their head or the smartphone.
 
-Finally we can get to recognising the gesture being performed.
-
-\subsubsection{Regression}\nl
+\subsubsection{Relative Positioning}\nl
 % NN vs Function, how best to phrase?
 % Used for Pointing (Dietic)
 % Great if data in is accurate (IMU may not be ideal without filtering)
+One solution employed by papers proposing systems that tracked Manipulative (\tempnote{or dietic, or both?}) pointing gestures was to simply use the raw data (or a function of the data) to map detected facial features directly alter the UI.
+
+A common approach was to take the position of the nose extracted from an image from the front-facing camera and map it to a point on the screen\cite{gorodnichy2004nouse, roig2015face, varona2008hands}. 
 
 \subsubsection{Recurrent Neural Network (RNN)}\nl
 % Write out the 
 % Given a sequence, classify the type of motion
 % not ideal if don't have known fixed number of frames, unless staggered
+An RNN is a Neural Network that takes a sequence of elements and has an internal state that is updated by some function of the current element being processed and the current state.
+\citeauthor{sharma2018recognizing} proposed the use of an RNN in order to recognise head gestures, wherein the RNN input was a sequence of facial landmarks extracted from a sequence of images\cite{sharma2018recognizing}. 
+An advantage of using an RNN is that you don't strictly need to know exactly when the in the sequence the gesture was performed, just that it is present within the sequence.
+A downside however is that internal state isn't maintained between predictions, as such you \textit{must} provide a sequence and the input sequence \textit{must} always be of a fixed length\footnote{\tempnote{metion that best to our knowledge this isn't supported}}. Input must there for be broken-up to fixed lengths, either requiring padding prior to/after the gesture recorded (if you do not have enough elements for the required sequence). To break-up the input you need to either run the model each time-step, providing a rolling window representing the last $x$ frames of state, or to have another means to segment your recorded input to then pass into the RNN.
 
-\subsubsection{Markov Model}\nl
+\subsubsection{Hidden Markov Model (HMM)}\nl
 % Given current state and new input, determine the new state
 % Great if continuous input
 One way that a gesture can be described is via a set of possible states (e.g. head poses or movement) and a set of rules which describe how these states can change.
 However you may not be able to directly observe the 
 \citeauthor{elmezain2008hidden} utilise such a method through the use of a Hidden Markov Model to \cite{elmezain2008hidden}
+\citeauthor{neelasagar2015real} took a similar approach, however they were trying to interpret arabic numerals 'drawn' with the movement of the phone\cite{neelasagar2015real}. As such IMU data was fed into a HMM to predict the number drawn.
+
+After preprocessing / cleaning the data, the systems reviewed would the use HMMs\cite{neelasagar2015real} to classify the gesture performed, possibly in conjunction with additional input such as gaze\cite{kong2021eyemu}.
+
+A benefit of HMMs over RNNs is that they hold state between input, and as such you can process each frame of data as it is available, rather than needing to provide a sequence.
+
+\subsubsection{Dynamic Time Warping (DTW)}
+regarding phone gestures...Others however utilised a technique called Dynamic Time Warping (DTW), sometimes used in conjunction with a HMM.
+\tempnote{refs}\nl
 
 % \textbf{OLD}
 % \\
