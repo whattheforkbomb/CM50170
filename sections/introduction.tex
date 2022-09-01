@@ -1,54 +1,22 @@
 \section{Introduction} % 0.5 Pages
-
 %% What 
 % State of The World:
-There are attempts to introduce an additional modal of interaction with smart devices utilising the user's face.
-% References
-These exist on a spectrum with regards to interaction techniques: Using the face as a pointer, typically based on the movement/position of the user's nose; detecting gestures based on the movement/pose of the user's face; and a combination of the two.
-% Need to actually discuss any in particular?
-% References
+Touchscreens have been the primary interface with which users interact with modern smartphones, either through directly touching UI elements (such as buttons or an on-screen keyboard) or through the use of touch-gestures. 
+Over recent years there has been a trend of smartphone touchscreens increasing in size\cite{xuesheng2018research}, which does not afford optimal reachability of the full screen for the thumb for interactions\cite{le2018fingers}. This reduces usability for one-handed interaction, which is a common mode of use\cite{hoober2013users}
 \\\\
-% The Problem:
-A common issue that afflicts many of these systems/approaches is that they don't distinguish between the movement of the phone or the movement of the user's head. For example, the user moving their head to the left, will be treated the same as the user moving the phone to the right, since from the front-facing camera's perspective it looks like the head is moving in the same way% %(see picture)
-% TODO: Better explanation
-% References (some even note it as a feature, e.g. you can move the phone instead of moving your head)
-This reduces the number of 'recognisable' gestures.
-% Explain this, e.g. can't use head movement as pointer, vs phone movement as gesture
+An emerging solution to this is to include head gestures as an additional mode of input, by tracking the head via the smartphone's front-facing camera\cite{gorodnichy2004nouse, deepateep2020facial, voelker2020headreach, roig2015face, hansen2006use, francone2011using}.
+A problem with tracking something via a camera that can have a moving Point-of-View (PoV) is that changing the camera's PoV can \textit{look} like movement of the object being tracked.
+For example, the user moving their phone to the left, will be treated the same as the user moving their head to the right, since the positioning and movement of the head from the front-facing camera's point of view will look the same, see \autoref{fig:teaser}.
+Some papers knew of this issue and accept it as a feature\cite{hansen2006use}, others note it as a known fault to be aware of\cite{francone2011using, varona2008hands}, while others don't indicate whether this has been accounted for\cite{gorodnichy2004nouse, deepateep2020facial, voelker2020headreach,roig2015face}.
 \\\\
 % Research Question:
-We look to explore whether such a system could distinguish between the user moving their head vs the phone being moved. % How to better phrase this?
+In this paper we look to propose a system that can distinguish between the head or smartphone being moved. In being able to differentiate the two, it should also be able to recognise gestures based on the smartphone movement.
 
 % Solution/What We Did:
 In order to develop a proof-of-concept, a data driven approach was taken.
-As such a study was undertaken to collect the camera feed and IMU/Gyro of the smart device, an IMU within an earbud worn by the user, and 3D positioning of the user's head and the smart device via a motion capture stage.
-With the motion capture data being synced to the IMU/Gyro data and photos, a system could be trained to recognise several gestures and learn to distinguish between whether an observed gesture was due to the phone or the user's head moving.
-% How is this system evaluated?
+As such a study was performed to collect data: image sequences from the front-facing camera of the smartphone, IMU data from the smartphone, and 3D positioning of the user's head and the smart device via a motion capture system (to provide a ground truth).
 
+With the motion capture data being synced to the IMU data and images, a system could be trained to recognise several gestures and learn to distinguish between whether an observed gesture was due to the smartphone or the user's head moving.
 
-
-% Look at https://faculty.washington.edu/wobbrock/pubs/Wobbrock-2015.pdf ? Need this still
-
-
-
-% Modern smartphone\footnote{We are using this term to mean mobile devices that utilise a touch-screen and have internet connectivity, and can be extended to also include tablets.} screens have been increasing in size over the last few years\cite{xuesheng2018research}.
-% In stationary contexts, when you are able to support the phone or use two-handed, this can increase the speed and accuracy of performing tasks via the touch interface\cite{tsai2017testing}.\\
-% However adverse to the trend of increasing screen size, there is a tendency to interact with the phone one-handed\cite{hoober2013users}, which does not afford optimal reachability of the full screen for the thumb for interactions\cite{le2018fingers}.
-% \\\\
-% One approach to increase usability is to add gestures and/or accept additional input modalities.
-
-% Given we already have the touchscreen, we can look to include touch gestures that utilise the user's thumb\cite{{hakka2020design, lai2019thumbstroke}}.
-% These are implemented by some systems already, such as being able to double-tap and drag to change the zoom of a photo in Google Photos.
-% However swiping gestures on the touch-screen are becoming more widely adopted within smartphones to support specific actions, such as navigation, and cannot be utilised\cite{hueber2020headbang}.
-% % Why bad?
-
-% Gaze can be utilised to identify where a user is focusing, such that input can be centred on their attention, however typically gaze tracking requires special hardware to accurately track eyes and understand where user is looking\cite{voelker2020headreach}.
-
-% Head tracking can however be used as an approximation to gaze, utilising the user's head-pose relative to the phone to indicate direction\cite{{onuki2016combined, gorodnichy2002importance}}, and support additional gestures to be used in conjunction with touch to extend the actions the user can perform.
-% \\\\
-% A second approach is to have an adaptive user interface (AUI) which can react to the user to aid them in completing their goals\cite{wesson2010can}.
-
-% These can adapt by either adjusting the UI elements in response to some context, such as what task their performing, or what element they are focusing on\cite{pfeuffer2021artention}.
-
-% Or this can be achieved by extending the UI in the third dimension and having the UI adjust to the user's perspective\cite{francone2011using}.
-% \\\\
-% The goal of this project will be to develop a system that adapts the interface based on user context, primarily driven by user perspective, and which supports the use of head gestures to aid in interaction with larger screens; building upon the prior works we shall discuss in the literature review below.
+% What was the system's performance? Did we succeed?
+% How is the work to be extended?

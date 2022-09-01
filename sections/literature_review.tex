@@ -1,5 +1,4 @@
 \section{Literature Review} % 2-3 Pages
-
 In this section we will review existing literature to build an understanding of: the gestures we can expect to process, how they may be used and what they mean; Methods with which to obtain data pertaining to the pose of a head; and finally the means with which we can track movement and determine the gesture being performed.
 % Types of Head Gestures (Pointing (Dietic & Manipulative) vs Semaphoric)
 %   Since used by the systems mentioned in the intro, discuss these 3 types
@@ -155,11 +154,13 @@ The least reasonable methods do not bare reviewing due to unrealistic expectatio
 These may be suitable in specific environments, but are not reasonable in meeting our goal.
 
 More reasonable, yet still in-feasible, involve localising the smartphone relative to the environment.
-One method is 'camera tracking', wherein the movement of the camera is estimated through analysis of an image stream from the rear-facing camera. This is a technique common-place in VFX to recreate the path taken by a camera in 3D.
+
+\tempnote{Picture of features used for camera tracking}
+One method is 'camera tracking', wherein the movement of the camera is estimated through analysis of an image stream from the rear-facing camera\cite{jiang2000camera}. This is a technique common-place in VFX to recreate the path taken by a camera in 3D.
 Unfortunately this isn't reasonable to use on current modern mobile phones as they don't all support the ability to capture images from multiple cameras (some via software, others due to hardware limitations). As such we will not be able to utilise the rear camera as the front-camera will be required to track the user's face in our proposed system.
 
 Another solution is the use of either Depth-Cameras (cameras that capture an array representing the distance to something in the environment) or LiDaR (which provides a point cloud of the environment ahead of the phone), and tracking the smartphone's movement through the observed 3D space.
-Unfortunately these require special hardware that isn't available on most smartphones, in particular rear-facing; most LiDar/depth cameras that exist on modern smartphones are front-facing\tempnote{ref samsung and ios face filters/emoji crap}.
+Unfortunately these require special hardware that isn't available on most smartphones, in particular rear-facing; most depth cameras that exist on modern smartphones are front-facing (such as those used by Apple and Samsung for their Animoji/Memoji and AR Emoji respectively), and the only mainstream phones to provide a LiDaR on the rear of the phone are the iPhone Pros (currently just the 12 and 13 series).
 
 The only method we found to be reasonable and feasible was to record the linear and angular acceleration of a smartphone's Inertial Measurement Unit (IMU)\cite{mantyla2000hand, kratz2013combining, neelasagar2015real, garcia2014contextualized}. 
 An IMU provides the acceleration experienced in the 6 Degrees of Freedom (DoF)\footnote{3 Linear Axis: X, Y, Z, 3 Angular Axis: Yaw, Pitch, Roll (though this can also be expressed as a Quaternion to avoid gimble lock\tempnote{ref here, or just drop Quaternion note?})} the smartphone can be manoeuvred through.
