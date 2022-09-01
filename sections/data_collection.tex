@@ -11,25 +11,14 @@
 % start with outline of the study before any subsequent headings, e.g. what is the design
 % Outline data required?
 
-For a data-driven approach to work we need to first determine what data we need to collect in order to train our system. We have identified the following types of data:
-\begin{description}
-    \item[Images From The Front Facing Camera] Given the majority of papers we reviewed \tempnote{Citations again?} utilise a camera to track the user's face, from which they can derive the gestures, we feel it necessary to do the same.
-    \item[Smartphone Acceleration Data] To understand whether the smartphone's PoV is changing we need to know how it is moving. 
-    \item[Head Acceleration Data] If we can determine the movement of the smartphone via acceleration data, it is reasonable to see if we can also do the same with the user's head.
-    \item[Actual Head and Phone Pose (Ground-Truth)] In order to accurately train one models we propose below, we will need some Ground-Truth data.
-\end{description}
-
-With these data-types we can then build-up a dataset by recording each of the data-types during the performance of a series of gestures. Knowing the gesture associated to the recorded data will allow us to then train our system to recognise the gestures based on the data.
-
-To create the required dataset we decided upon 11 gestures, each with 2-8 variations (effectively directions the gesture could be performed in), resulting in a total of 44 distinct motions to obtain samples of. A table of the gestures and variations can be found under \autoref{app:gestures}.
-
-\subsubsection{Apparatus and Techniques}
+\subsubsection{Apparatus and Techniques}\nl
 Given the data types listed above, we decided to use the following tools:
-\begin{enumerate}
-    \item \textbf{Pixel 4a} - An Android Smartphone with Bluetooth, a front-facing camera, and an IMU
-    \item \textbf{eSense Earable} - A Bluetooth Earbud with an IMU
-    \item \textbf{CAMERA Motion Capture Studio} - A Motion Capture (MoCap) studio found on campus within the University of Bath
-\end{enumerate}
+\begin{description}
+    \item[Smartphone]\nl Pixel 4a
+    An Android Smartphone with Bluetooth, a front-facing camera, and an IMU
+    \item[eSense Earable] - A Bluetooth Earbud with an IMU
+    \item[CAMERA Motion Capture Studio]\nl - A Motion Capture (MoCap) studio found on campus within the University of Bath
+\end{description}
 The smartphone and earbud (when paired via bluetooth) will be able to provide the first three data-types defined above. While the Ground-Truth data can then be supplied by the MoCap studio.
 \\\\
 To collect the data we developed an application to run on the smartphone. 

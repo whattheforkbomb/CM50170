@@ -41,12 +41,16 @@ In this section we will review existing literature to build an understanding of:
 
 % Discuss why might want head gestures ?
 %   - Any cases where these motions may be useful for SIIDs (Situationally Induced Impairments or Disabilities)?
+% add more input options, not rely on using intuitive gestures that have since become system gestures (android navigation gestures) \cite{hueber2020headbang}
 
 % Outline the types of gesture, and of those, which ones head gestures can b classified as.
 % From example papers regarding head gesture control for mobile devices, look into 
 
 Given our goal is to develop a means to distinguish head and phone gestures on smartphone devices, we first need to understand the gesture's we want to recognise and distinguish.
 Here we will look at existing literature that outline the head and phone gestures you would expect to use while interfacing with a smartphone.
+
+% https://eprints.soton.ac.uk/261149/1/GestureTaxonomyJuly21.pdf
+% Breakdown the relevant gestures
 
 Gestures can be classified into 5 classes\cite{karam2005taxonomy}:
 \begin{description}
@@ -66,6 +70,17 @@ Of these gesture classes only Dietic, Manipulative, and Semaphoric can be applie
 % how might a phone gesture differ from head
 % why might they look the same?
 
+% yan2018headgesture, they explored existing head gestures (maybe focusing on those trackable via IMU over other methods?). Their study resulted in details shown in figure
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/yan2018headgesture_fig2_proposed_gestures.png}
+    \caption{\label{fig:yan2018headgesture_proposed_gestures} Proposed head gestures and their corresponding actions\cite{yan2018headgesture}.}
+    \Description[9 diagrams depicting the gestures proposed by \citeauthor{yan2018headgesture}]{9 diagrams depicitng the path of the nose taken to perform each gesture proposed by \citeauthor{yan2018headgesture}.} % Expand on this
+\end{figure}
+An example of this can be seen in the work of \citeauthor{yan2018headgesture} who propose 9 gestures (\autoref{fig:yan2018headgesture_proposed_gestures}) and utilise the IMU embedded within the Hololens\cite{yan2018headgesture}.
+% why did they settle on these gestures (reference again later in development)
+
+
 \subsection{Head and Phone Feature Extraction}
 % Head Tracking (From Smartphones)
 % How track head, (Front facing camera, )
@@ -81,37 +96,41 @@ Of these gesture classes only Dietic, Manipulative, and Semaphoric can be applie
 Now that we understand the gestures we want to recognise and differentiate between, we can look at how one could extract head and phone pose. Without knowing the head and phone poses, we can't even try to determine the gesture being performed.
 %split this section into both feature extraction and tracking?
 
-\subsubsection{Head Mounted IMU}
+\subsubsection{Head Mounted IMU}\nl
 % Included in VR/AR devices, earbuds with embedded IMU
-One of the simpler ways to track the movement of a user's head is with an Inertial Measurement Unit (IMU), as this is a physical device that can be used to measure rotational and linear acceleration \footnote{Linear acceleration is typically less accurately tracked compared to angular acceleration (SOURCE!!!!???)}.
-An example of this can be seen in the work of \citeauthor{yan2018headgesture} who propose 9 gestures (\autoref{fig:yan2018headgesture_proposed_gestures}) and utilise the IMU embedded within the Hololens\cite{yan2018headgesture}.
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth]{figures/yan2018headgesture_fig2_proposed_gestures.png}
-    \caption{\label{fig:yan2018headgesture_proposed_gestures} Proposed head gestures and their corresponding actions\cite{yan2018headgesture}.}
-\end{figure}
+One of the simpler ways to track the movement of a user's head is with an Inertial Measurement Unit (IMU), as this is a physical device that can be used to measure rotational and linear acceleration.%\footnote{Linear acceleration is typically less accurately tracked compared to angular acceleration (SOURCE!!!!???)}.
 
-\subsubsection{HAAR Cascades}
-(Viola Jones Algorithm), find ref
-% Random forrest?
+
+\subsubsection{HAAR Cascades / The Viola Jones Algorithm}\nl
+(Viola Jones Algorithm\cite{viola2004robust})
+% An aside on use to extract location of face, but no features
 % Application of filters representing features found on common faces.
 % Applied in a cascade, e.g. only check for next set of features if found large one.
+% Used to reduce search space / and limit data that needs processing.
+
+% Can be extended to also extract the location of features
 % https://www.proquest.com/docview/1927472131?fromopenview=true&pq-origsite=gscholar
 \cite{kim2017real} Utilise HAAR-like features with an Adaboost classifier to detect 4 features: left eye, right eye, nose-tip, and mouth.
+
 Use Greyscale image, and use integral image (summed area table) to apply the features.
 Determine head pitch and yaw (not roll).
 
+% However typically used to narrow down the search space for subsequent logic
 \cite{neto2012real} Also utilise HAAR-like features applied to an integral image, however they utilise a histogram of pixel intensity (amount of variation in a given slice of the image) to identify the eyes.
 This is done once during calibration to then extract the eyes (left eye 30\% along the line, right is 70\%) and nose (if the eyes are $d$ far apart, the nose is $d*0.45$ below the midpoint between the eyes), assuming head is upright and user is facing camera.
 
-\subsubsection{Convolutional Neural Network (CNN)}
+A downside to the V-J algo is "Informal observation suggests that the face detector can detect faces that are tilted up to about ±15 degrees in plane and about ±45 degrees out of plane (toward a profile view). The detector becomes unreliable with more rotation than this."\cite{viola2004robust}
+
+% Random forrest?
+
+\subsubsection{Convolutional Neural Network (CNN)}\nl
 % train model that extracts features that found in faces
 % either predict: face exists, Region of image containing face, Derived features of face (size, rotation, landmarks, etc)
 
 % Alternatives???
 
 
-\subsection{Head and Phone Gesture Recognition}
+\subsection{Head and Phone Gesture Recognition}\nl
 % Head Gesture Recognition
 % How did reviewed systems do this?
 % Given data, how determine gesture performed, e.g. Dietic pointing (use raw data, e.g. calculate screen region/pointer position from data) vs Semaphoric/Manipulative classifying (given data, determine gesture performed)
@@ -124,17 +143,17 @@ This is done once during calibration to then extract the eyes (left eye 30\% alo
 
 Finally we can get to recognising the gesture being performed.
 
-\subsubsection{Regression}
+\subsubsection{Regression}\nl
 % NN vs Function, how best to phrase?
 % Used for Pointing (Dietic)
 % Great if data in is accurate (IMU may not be ideal without filtering)
 
-\subsubsection{Recurrent Neural Network (RNN)}
+\subsubsection{Recurrent Neural Network (RNN)}\nl
 % Write out the 
 % Given a sequence, classify the type of motion
 % not ideal if don't have known fixed number of frames, unless staggered
 
-\subsubsection{Markov Model}
+\subsubsection{Markov Model}\nl
 % Given current state and new input, determine the new state
 % Great if continuous input
 One way that a gesture can be described is via a set of possible states (e.g. head poses or movement) and a set of rules which describe how these states can change.
