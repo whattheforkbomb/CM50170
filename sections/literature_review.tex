@@ -143,6 +143,10 @@ A downside to the V-J algo is "Informal observation suggests that the face detec
 % Some alo output similar to HAAR, e.g. bounding box
 % Even open CV, which has had VIOLA-Jones algo built-in now recomends use of CNN (YUNET?) instead of their HAAR classifier
 
+\subsubsection{Colour Segmentation}\nl
+Either removing all colours that aren't within the defined colour space, to then perform additional processing, such as edge detection, or using histograms to find regions in the image of given colours to detect features?
+
+
 \subsection{Phone Localisation and Tracking}
 % We now have several methods we can refer to in order to determine the head gesture being performed by a user, however we now need to explore the final area in the related works: recognising phone gestures. 
 During our review of related works we came across several means of localising a smartphone / tracking a smartphone's movement, each with varying degrees of feasibility.
