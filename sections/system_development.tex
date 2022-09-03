@@ -6,10 +6,10 @@
 %   Outline data we need
 
 This section details the process undertaken to develop the system which can meet the goal (outlined in the Introduction): distinguishing between head and phone based gestures on a smartphone.
-\\\\
-In order to develop the aforementioned system we opted to take a data-driven approach. The benefit of taking a data-driven approach is that we can leverage Machine Learning, and train the system with exemplar data, rather than needing to manually determine the features and derive the algorithm needed to accomplish our goal.
 
 \subsection{Taking A Data Driven Approach}
+In order to develop the aforementioned system we opted to take a data-driven approach. The benefit of taking a data-driven approach is that we can leverage Machine Learning, and train the system with exemplar data, rather than needing to manually determine the features and derive the algorithm needed to accomplish our goal.
+
 For a data-driven approach to work we need to first determine what data we need to collect in order to train our system. We have identified the following types of data:
 \begin{description}
     \item[Images From The Front Facing Camera]\nl Given the majority of papers we reviewed \tempnote{Citations again?} utilise a camera to track the user's face, from which they can derive the gestures, we feel it necessary to do the same.
@@ -61,7 +61,7 @@ We will also slice the data in overlapping chunks (at least for the RNN model).
 % script.processor.process_data('G:/Study/1', 1000)
 % script.processor.process_data('G:/Study/0', 3000)
 
-\subsection{The Proposed Models} % TODO: Drop /s if only one model % The Proposed System
+\subsection{The Proposed Model} % TODO: Drop /s if only one model % The Proposed System
 % App design (maybe some plant uml diagrams in appendix?)
 % Models built
 % Produce either: regression model, able to predict orientation diff between face and phone (based on zeroed orientation); or classifier, able to predict the motion performed (e.g. head turn, phone moved, etc... without need for getting components of either) or to predict whether the observed head orientation is due to head or phone movement, then add some logic to determine which action given observed gesture + cause.
