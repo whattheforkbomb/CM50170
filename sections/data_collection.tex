@@ -2,68 +2,113 @@
 % outline
 % - Taking data driven approach (intro to section)
 % - The data we'll be collecting
+
+
+In order to develop the aforementioned system we opted to take a data-driven approach.
+%  The benefit of taking a data-driven approach is that we can leverage Machine Learning, and train the system with exemplar data, rather than needing to manually determine the features and derive the algorithm needed to accomplish our goal.
+
+For a data-driven approach to work we need to first determine what data we need to collect in order to train our system. We have identified the following types of data:
+\begin{description}
+    \item[Images From The Front Facing Camera]\nl 
+    Though a depth camera would likely be more reliable and accurate in extracting the shape/pose of the user's face, it does require hardware that is not yet standard on all smartphones. To enable our system to be run on as many smartphones as possible we will be opting to detect and track the user's head via the front-facing camera, for which we found many techniques from which to extract the user's head movement\cite{varona2008hands, lopez2012head, viola2004robust, kim2017real, neto2012real, francone2011using, yan2021fast}.
+    \item[Smartphone Acceleration Data]\nl 
+        To understand whether the smartphone's PoV is changing we need to know how it is moving. 
+        As noted in our review of surrounding literature, the most feasible means to do this is with the IMU present in modern smartphones\cite{mantyla2000hand, kratz2013combining, neelasagar2015real, garcia2014contextualized}.
+    % \item[Head Acceleration Data]\nl 
+    %     If we can determine the movement of the smartphone via acceleration data, it is reasonable to see if we can also do the same with the user's head.
+    \item[Ground-Truth Data]\nl 
+        In order to accurately train a model that can achieve our goal, we will need some Ground-Truth data. This will include the gesture the data is associated with, so that the system can classify gestures. It will also be helpful to capture the actual head and phone poses/motion during given gestures such that we can aim to train a model that can predict the movement of the head and phone.
+\end{description}
+
 % - The tools and apparatus we'll be using
 % - The data collection app (how it works, issues, output format)
 % - Gestures we chose to collect (based on lit review systems, (only subset of pointing, only looking at 8 points around the screen, rather than anywhere))
+\subsubsection{Apparatus and Techniques}\nl % Different Header?
+\textbfit{Motion Capture System}
+In order to collect the actual positions of a participant's head and the smartphone, we will be using a Motion Capture (MoCap) System.
+\\\tempnote{image of CAMERA MoCap Stage}\\
+To track both the head and the smartphone a set of ten markers, that can be tracked by the MoCap system, will be used (five trackers each).
+One tracker will only permit the tracking of the location. Using a second, placed , to extract the roll, pitch, and yaw we need at least two more points in order to 
+
+\textbfit{Data Collection Smartphone Application}
+Discuss how the application will collect data (images and need to save as raw yuv bytes, IMU with 60 or 100Hz sample rate saved to csv)
+How data will be organised
+How app will provide instructions
+Shake detection for synchronising with MoCap data
+
 % - Study Outline
 %   - What participants would be asked to do
 %   - Need footnote or aside to mention that originally intended to also capture IMU data from an eSense earbud, but was not ultimately collected, hence why earbud included in steps
+\subsubsection{Study Protocol}\nl
+% grab instructions from PIS
+
 % - The study data
 %   - breakdown of participants
 %   - Recordings captured (/motions)
 %   - Data analysis (distance moved by gesture, time taken, face detected (using YuNet and OpenCV))
 %       - Why might expect
 %       - Issue accurately calculating rotation delta (maybe use this? https://forum.unity.com/threads/shortest-rotation-between-two-quaternions.812346/)
+\subsubsection{Study Data}\nl
+The study was performed on the 22\textsuperscript{nd} and 23\textsuperscript{rd} of August 2022, with a total of 8 participants.
+A breakdown of the participants by age and gender can be found under \autoref{app:study_data}, in the \autoref{tab:participant_breakdown}, in summary our participants were between the ages 23-27, with 37.5\% identifying as female and the remaining 62.5\%identifying as male.
 
+\tempnote{Include graph of range of motion by getsure (for head and phone in all 3 axis), ideally box and wisker-esq plot, with min, max and mean shown}\\
+\tempnote{Include graph for percentage of frames within which a head is detected, by gesture}\\
+\tempnote{Include graph of time taken for motion performance by gesture, ideally box and wisker-esq plot, with min, max and mean shown}\\
+\tempnote{Potentially include graphs breaking down time taken by participant in appendix?}
 
-\subsubsection{Apparatus and Techniques}\nl % Different Header?
-Given the data types listed above, we decided to use the following tools:
-\begin{description}
-    \item[Smartphone]\nl Pixel 4a
-    An Android Smartphone with Bluetooth, a front-facing camera, and an IMU
-    \item[eSense Earable] - A Bluetooth Earbud with an IMU
-    \item[CAMERA Motion Capture Studio]\nl - A Motion Capture (MoCap) studio found on campus within the University of Bath
-\end{description}
-The smartphone and earbud (when paired via bluetooth) will be able to provide the first three data-types defined above. While the Ground-Truth data can then be supplied by the MoCap studio.
-\\\\
-To collect the data we developed an application to run on the smartphone. 
-% Need this?
-This was developed in Kotlin\footnote{A programming language that runs on the JVM and is used to develop applications for Android.} and the Android SDK.
-The application was designed to show participants a motion (a gesture and direction/variation) to perform. This is detailed in text, images, and a video. \tempnote{Include figures to show this (spread accross columns at top of page?)}
-The participant would then be asked to perform this motion after pressing a record button. While recording the app would do the following:
-\begin{itemize}
-    \item Capture images as frequently as possible from the front-facing camera, saving them as raw YUV bytes, with the UTC timestamp as the name.
-    \item Record the smartphone IMU data (linear and angular accelerations), saving them to a csv with the UTC timestamp.
-    \item Record the earbud IMU data (linear and angular accelerations), saving them to a csv with the UTC timestamp.
-\end{itemize}
-% Link to class diagram, or do we just want photos?
-Once the participant has finished with the motion they could press the same button to stop the recording. Otherwise the recording will automatically terminate after 10 seconds, since the gestures shouldn't take more than a couple seconds to perform and the phone has limited RAM and storage with which to save data.
-To prevent accidentally stopping the recording too soon, say by accidentally double-tapping the screen, we disable the button for 2 seconds.
+% With these data-types we can then build-up a dataset by recording each of the data-types during the performance of a series of gestures. Knowing the gesture associated to the recorded data will allow us to then train our system to recognise the gestures based on the data.
 
-Once a motion has been recorded, the app shows the participant the next motion to perform. When the participant completes the final motion to perform, the app returns to the first motion. This repeats two times, such that each motion is captured 3 times. This is to collect variance in each motion for each participant.
-\\\\
-In order to collect the Ground-Truth data, the study was performed within the MoCap studio. The participant was asked to wear hat that had a motion-tracker attached, such that the tracker was placed around the middle of the back of their head. An exact position wasn't important as we only needed to determine the relative movement of their head, rather than the exact position.
-The smartphone was then tracked via a motion tracker attached to a 3D-printed mount, such that the tracker would not affect the participant's grip on the phone, or interfere with the images captured from the front-facing camera.\tempnote{Include figure to show this}
-Each tracker was composed of 5 points. 3 were positioned such that they formed a right-angle triangle, allowing the orientation of the tracker to be derived. The other 2 points were there to improve tracking accuracy, and help make the trackers unique and distinguishable.
-The MoCap system would track each of the 10 points at 60 fps and export the data as an fbx file.
+% To create the required dataset we decided upon 11 gestures, each with 2-8 variations (effectively directions the gesture could be performed in), resulting in a total of 44 distinct motions to obtain samples of. A table of the gestures and variations can be found under \autoref{app:gestures}.
 
-In order to later synchronise the data collected we required the user to shake the smartphone, with a force of at least 2G, prior to beginning each round of 44 motions. The app would record the shake magnitude (in the X, Y, and Z axis) and the UTC timestamp of when it happened.
-\\\\
-The full study protocol can be found under \autoref{app:protocol}
+% \subsubsection{Apparatus and Techniques}\nl % Different Header?
+% Given the data types listed above, we decided to use the following tools:
+% \begin{description}
+%     \item[Smartphone]\nl Pixel 4a
+%     An Android Smartphone with Bluetooth, a front-facing camera, and an IMU
+%     \item[eSense Earable] - A Bluetooth Earbud with an IMU
+%     \item[CAMERA Motion Capture Studio]\nl - A Motion Capture (MoCap) studio found on campus within the University of Bath
+% \end{description}
+% The smartphone and earbud (when paired via bluetooth) will be able to provide the first three data-types defined above. While the Ground-Truth data can then be supplied by the MoCap studio.
+% \\\\
+% To collect the data we developed an application to run on the smartphone. 
+% % Need this?
+% This was developed in Kotlin\footnote{A programming language that runs on the JVM and is used to develop applications for Android.} and the Android SDK.
+% The application was designed to show participants a motion (a gesture and direction/variation) to perform. This is detailed in text, images, and a video. \tempnote{Include figures to show this (spread accross columns at top of page?)}
+% The participant would then be asked to perform this motion after pressing a record button. While recording the app would do the following:
+% \begin{itemize}
+%     \item Capture images as frequently as possible from the front-facing camera, saving them as raw YUV bytes, with the UTC timestamp as the name.
+%     \item Record the smartphone IMU data (linear and angular accelerations), saving them to a csv with the UTC timestamp.
+%     \item Record the earbud IMU data (linear and angular accelerations), saving them to a csv with the UTC timestamp.
+% \end{itemize}
+% % Link to class diagram, or do we just want photos?
+% Once the participant has finished with the motion they could press the same button to stop the recording. Otherwise the recording will automatically terminate after 10 seconds, since the gestures shouldn't take more than a couple seconds to perform and the phone has limited RAM and storage with which to save data.
+% To prevent accidentally stopping the recording too soon, say by accidentally double-tapping the screen, we disable the button for 2 seconds.
 
-\subsubsection{Study Results}
-Our study was run with 8 participants.
+% Once a motion has been recorded, the app shows the participant the next motion to perform. When the participant completes the final motion to perform, the app returns to the first motion. This repeats two times, such that each motion is captured 3 times. This is to collect variance in each motion for each participant.
+% \\\\
+% In order to collect the Ground-Truth data, the study was performed within the MoCap studio. The participant was asked to wear hat that had a motion-tracker attached, such that the tracker was placed around the middle of the back of their head. An exact position wasn't important as we only needed to determine the relative movement of their head, rather than the exact position.
+% The smartphone was then tracked via a motion tracker attached to a 3D-printed mount, such that the tracker would not affect the participant's grip on the phone, or interfere with the images captured from the front-facing camera.\tempnote{Include figure to show this}
+% Each tracker was composed of 5 points. 3 were positioned such that they formed a right-angle triangle, allowing the orientation of the tracker to be derived. The other 2 points were there to improve tracking accuracy, and help make the trackers unique and distinguishable.
+% The MoCap system would track each of the 10 points at 60 fps and export the data as an fbx file.
 
-Unfortunately due to an issue with the application, the earbud IMU data was not recorded, despite the earbud being on and paired with the phone. This was not caught until after the study was completed.
+% In order to later synchronise the data collected we required the user to shake the smartphone, with a force of at least 2G, prior to beginning each round of 44 motions. The app would record the shake magnitude (in the X, Y, and Z axis) and the UTC timestamp of when it happened.
+% \\\\
+% The full study protocol can be found under \autoref{app:protocol}
 
-Due to a late start, and overrunning into the next participant's slot, participant 0 was unable to complete their 3\textsuperscript{rd} round of motions.
+% \subsubsection{Study Results}
+% Our study was run with 8 participants.
 
-Some participants didn't initially stop recording upon completing a motion, as such their initial motions have superfluous frames that don't contain data relevant to the motion they're recorded for.
+% Unfortunately due to an issue with the application, the earbud IMU data was not recorded, despite the earbud being on and paired with the phone. This was not caught until after the study was completed.
 
-\tempnote{Stats from the data, including figs and tables? Range of motion per gesture. Time taken by gesture and participant, Average sample rate for IMU and Images, Average Number of frames containing face by participant and gesture}
-% When Performed, Participants recruited, participant breakdown/stats
-% Missing earable data!!
+% Due to a late start, and overrunning into the next participant's slot, participant 0 was unable to complete their 3\textsuperscript{rd} round of motions.
 
-% Some participants didn't stop recording, contain misc frames
-% Some stats on the data?
+% Some participants didn't initially stop recording upon completing a motion, as such their initial motions have superfluous frames that don't contain data relevant to the motion they're recorded for.
+
+% \tempnote{Stats from the data, including figs and tables? Range of motion per gesture. Time taken by gesture and participant, Average sample rate for IMU and Images, Average Number of frames containing face by participant and gesture}
+% % When Performed, Participants recruited, participant breakdown/stats
+% % Missing earable data!!
+
+% % Some participants didn't stop recording, contain misc frames
+% % Some stats on the data?
 
