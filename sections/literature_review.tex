@@ -76,7 +76,7 @@ Of the 3 remaining gesture styles, we noted that systems rarely utilised a singl
     \centering
     \includegraphics[width=0.5\textwidth]{figures/yan2018headgesture_fig2_proposed_gestures.png}
     \caption{\label{fig:yan2018headgesture_proposed_gestures} Proposed head gestures and their corresponding actions\cite{yan2018headgesture}.}
-    \Description[9 diagrams depicting the gestures proposed by \citeauthor{yan2018headgesture}]{9 diagrams depicitng the path of the nose taken to perform each gesture proposed by \citeauthor{yan2018headgesture}.} % Expand on this
+    \Description[9 diagrams depicting the gestures proposed by \citeauthor{yan2018headgesture}]{9 diagrams depicitng the path of the nose taken to perform each gesture proposed by \citeauthor{yan2018headgesture}.} % TODO: Expand on this
 \end{figure}
 \\\\
 An example of this can be seen in the work of \citeauthor{yan2018headgesture}\cite{yan2018headgesture} who propose nine head gestures (\autoref{fig:yan2018headgesture_proposed_gestures}), the majority of which are purely Semaphoric, however several (such as scrolling, dragging, and zooming) could also be seen as Manipulative through the mapped action physically moving the content on screen.
@@ -129,9 +129,7 @@ While simple, and given favourable conditions, effective, this approach has seve
     \item Determining the values with which to segment the image, i.e. what colours will we accept as skin-tone? During their system evaluation \citeauthor{chan2004face}\cite{chan2004face} used participants with similar skin-tones to improve the system's robustness.
     \item Dependence on environment lighting.\\
         All three of the papers above\cite{huang2004robust,bin2007rgb,chan2004face} do make use of the HSV/yCbCr colour spaces, which make them more robust to changes in lighting intensity, however these systems can still be susceptible to changes in lighting temperature, colour, or shadows.
-\end{enumerate}
-\tempnote{How would I cite myself for unpublished work? This is what I did in my previous dissertation}
-\\\\
+\end{enumerate}\nl
 % \subsubsection{HAAR Cascades / The Viola Jones Algorithm}\nl
 A less naive approach is the Viola-Jones algorithm proposed in 2004\cite{viola2004robust}, used in digital cameras, smartphone camera apps, and several head gesture systems\cite{kim2017real, neto2012real, francone2011using}.
 Rather than looking for skin-tone to find faces, it uses the difference of intensity between regions of pixels, and checks if they match a set of templates, Haar-features. These features compare the relative intensity of 2, 3, or 4 neighbouring regions, e.g. is the centre of a region brighter than the regions to the left and right. 

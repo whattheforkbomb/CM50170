@@ -110,6 +110,22 @@ The output provided by the MoCap system was an fbx file which contains the posit
 %   - Need footnote or aside to mention that originally intended to also capture IMU data from an eSense earbud, but was not ultimately collected, hence why earbud included in steps
 \subsubsection{Study Protocol}\nl
 % grab instructions from PIS
+Upon attending the study, the participant will be provided an information sheet which will provide details on the study, such as the purpose, what data will be collected and managed, what they will be asked to do. Once read they will read through and sign the consent form if they are happy to continue.
+
+If consent is obtained, the participant will be asked to enter the Motion Capture stage (the space that is viewable to the MoCap system) and asked to wear the skull cap with the motion trackers attached.
+The MoCap system will then begin recording. and the participant will be provided with the smartphone, which will already have the data collection app running, and asked to read through the disclaimer, which reiterates what data is captured. Once they have read the disclaimer, the participant will shake the smartphone to start with their first take of gestures.
+
+Within the data collection app, the participant will be shown a diagram and text describing the gesture they need to perform. Once understood they are able to move on to show a video of the gesture, from both the phone's Point of View, and the participant's, along with additional brief text and a symbol describing the direction of motion for the gesture.
+If the participant has any questions regarding the motion they need to perform, they were welcome to ask the researcher present to further explain the motion, or to provide a demonstration.
+The participant will additionally be instructed to hold the phone as they typically would when using their smartphone, to say browse the internet or read messages.
+
+Once the participant is ready to perform they gesture they will tap the record button and perform the gesture. The recording will then be stopped when they press the button again after completing the gesture, or it will automatically stop after 10 seconds.
+The next gesture will then be shown to the participant.
+
+This is repeated until the participant has completed each gesture three times. Between each round of gestures the participant will be asked to shake the smartphone before being shown the next round of gestures. Once all the gestures have been completed, the participant will remove the skull cap, hand-in the smartphone, and read-through a debrief sheet, containing an additional request for consent to use the data.
+\tempnote{Should the PIS be included as an appendix?}
+
+Regarding the gestures participants were asked to perform, we decided upon 11 gestures, each with 2-8 variations (effectively directions the gesture could be performed in), resulting in a total of 44 distinct motions to obtain samples of. A breakdown of the gestures and variations can be found under \autoref{app:gestures}.
 
 % - The study data
 %   - breakdown of participants
@@ -121,14 +137,20 @@ The output provided by the MoCap system was an fbx file which contains the posit
 The study was performed on the 22\textsuperscript{nd} and 23\textsuperscript{rd} of August 2022, with a total of 8 participants.
 A breakdown of the participants by age and gender can be found under \autoref{app:study_data}, in \autoref{tab:participant_breakdown}, in summary our participants were between the ages 23-27, with 37.5\% identifying as female and the remaining 62.5\%identifying as male.
 
-\tempnote{Include graph of range of motion by getsure (for head and phone in all 3 axis), ideally box and wisker-esq plot, with min, max and mean shown}\\
-\tempnote{Include graph for percentage of frames within which a head is detected, by gesture}\\
-\tempnote{Include graph of time taken for motion performance by gesture, ideally box and wisker-esq plot, with min, max and mean shown}\\
-\tempnote{Potentially include graphs breaking down time taken by participant in appendix?}
+In total we were able to record 1028 gestures. The sample rate for the images was between 30-33 images per second, and the IMU sample rate was an expected 50$Hz$.
+A breakdown of the range of linear motion can be observed under \autoref{app:study_data} in \autoref{fig:range_of_linear_motion}.
+From this we can see the axis with the greatest movement typically correlate to the object being moved, e.g. the head or the phone, which is to be expected and helps to confirm the MoCap data is accurate.
+The gesture with the most movement in any given axis was for moving the head towards and away from the phone, with movement typically being between 15-30cm. However the gestures that involved the most movement across multiple axis were the ones that involved the translation of the phone, which typically saw movement across all three axis.
 
-% With these data-types we can then build-up a dataset by recording each of the data-types during the performance of a series of gestures. Knowing the gesture associated to the recorded data will allow us to then train our system to recognise the gestures based on the data.
+A breakdown of the angular motion can be observed under \autoref{app:study_data} in \autoref{fig:range_of_angular_motion}.
+Unfortunately we do not have the deltas of motion, only the exact amount of rotation performed. As such we have some issues with rotations being a around 360\textdegree / 2$\pi$. This did not occur with the gestures recorded, however due to the cyclical nature of angles, you can rotate a small amount and end up with a larger angle. 
+Reviewing the data we do have however does show that the MoCap data is consistent with what we would expect, showing greater rotation for gestures that require rotation of the head or phone, and minimal rotation during more linear gestures.
+\tempnote{currently trying to regenerate and use quaternions to get correct angle}
 
-% To create the required dataset we decided upon 11 gestures, each with 2-8 variations (effectively directions the gesture could be performed in), resulting in a total of 44 distinct motions to obtain samples of. A table of the gestures and variations can be found under \autoref{app:gestures}.
+By using a face detector\cite{yu2022yunet} with OpenCV we were able to generate a breakdown of the percentage of images within which a face could be detected. The percentage of frames with a face detected for each gesture, and variant of a gesture, is available under \autoref{app:study_data} in \autoref{tab:gesture_analysis}. 
+From the table we can see that some gestures have much lower frequency of frames wherein the head is detected. Most of these are to be expected, such as the gestures that rotate the phone, which can cause the camera's point of view to no longer include the face. A particular example is the Bottom-Centre variant of the Pointing-Rotate-Phone gesture, which involves the phone being tilted such that the top of the phone is tilted away from the participant's face. Given the front-facing camera is mounted on the top, this will result in the camera moving the furthest from the face.
+\autoref{tab:gesture_analysis} also includes the average time taken to perform the gesture across participants.
+On average all the gestures took between 2.4 - 3.6 seconds, with the circular and zoom motions, for both head and phone, taking the longest to perform.
 
 % \subsubsection{Apparatus and Techniques}\nl % Different Header?
 % Given the data types listed above, we decided to use the following tools:
