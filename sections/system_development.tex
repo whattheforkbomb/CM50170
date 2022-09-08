@@ -82,6 +82,7 @@ To build this model we will be using TensorFlow, with the Keras API, as TensorFl
 % %   might be slow as re-processing previous image
 % Our second proposed model we will be using transfer learning to extend an existing CNN trained on image net to predict the direction of motion, in each degree of freedom for both the head and phone, observed between two frames.
 % We could try to emulate the YuNet model, and output the head pose and position, a lack of 
+% One issue is lack of images not containing face, how to handle if no face detected?
 
 \subsubsection{Gesture Classification}\nl
 % Could have used an RNN bolted directly onto the back of the classifiers
@@ -91,6 +92,8 @@ For this we have chosen to train a HMM, as it will allows us to encode the gestu
 To build and train this we will first collect the output from out first model to generate the training data required. This will give us the data sequences we would expect to see in different gestures.
 To build the HMM we will use the HMMLearn python package. Implementation of the model in this scenario shouldn't matter as much as our previous model as evaluating a HMM is much more trivial than a neural network. You should be able to export the state and variables of the HMM and transfer these to any other language or framework.
 From here learning the hidden states is straight-forward, as we simply need to provide the 
+
+% How account for different sample rates? How include this as part of observation state?
 
 
 % If we have no transfer learning

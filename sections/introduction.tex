@@ -2,12 +2,12 @@
 %% What 
 % State of The World:
 Touchscreens have been the primary interface with which users interact with modern smartphones, either through directly touching UI elements (such as buttons or an on-screen keyboard) or through the use of touch-gestures. 
-Over recent years there has been a trend of smartphone touchscreens increasing in size\cite{xuesheng2018research}, which does not afford optimal reachability of the full screen for the thumb for interactions\cite{le2018fingers}. This reduces usability for one-handed interaction, which is a common mode of use\cite{hoober2013users}
+Over recent years there has been a trend of smartphone touchscreens increasing in size~\cite{xuesheng2018research}, which does not afford optimal reachability of the full screen for the thumb for interactions~\cite{le2018fingers}. This reduces usability for one-handed interaction, which is a common mode of use~\cite{hoober2013users}.
 \\\\
-An emerging solution to this is to include head gestures as an additional mode of input, by tracking the head via the smartphone's front-facing camera\cite{gorodnichy2004nouse, deepateep2020facial, voelker2020headreach, roig2015face, hansen2006use, francone2011using}.
+An emerging solution to this is to include head gestures as an additional mode of input, by tracking the head via the smartphone's front-facing camera~\cite{gorodnichy2004nouse, deepateep2020facial, voelker2020headreach, roig2015face, hansen2006use, francone2011using}.
 A problem with tracking something via a camera that can have a moving Point-of-View (PoV) is that changing the camera's PoV can \textit{look} like movement of the object being tracked.
 For example, the user moving their phone to the left, will be treated the same as the user moving their head to the right, since the positioning and movement of the head from the front-facing camera's point of view will look the same, see \autoref{fig:teaser}.
-Some papers knew of this issue and accept it as a feature\cite{hansen2006use}, others note it as a known fault to be aware of\cite{francone2011using, varona2008hands}, while others don't indicate whether this has been accounted for\cite{gorodnichy2004nouse, deepateep2020facial, voelker2020headreach,roig2015face}.
+Some papers knew of this issue and accept it as a feature~\cite{hansen2006use}, others note it as a known fault to be aware of~\cite{francone2011using, varona2008hands}, while others don't indicate whether this has been accounted for~\cite{gorodnichy2004nouse, deepateep2020facial, voelker2020headreach,roig2015face}.
 \\\\
 % Research Question:
 In this paper we look to propose a system that can distinguish between the head or smartphone being moved. In being able to differentiate the two, it should also be able to recognise gestures based on the smartphone movement.

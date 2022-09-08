@@ -217,7 +217,7 @@ A downside however is that internal state isn't maintained between predictions, 
 % Given current state and new input, determine the new state
 % Great if continuous input
 % Another way that a Semaphoric gesture can be described is via a set of possible states, e.g. head poses or movement, and a set of rules which describe how these states can change.
-To predict Semaphoric gestures using a continuous input, without a need for a rolling window, we found a couple of systems which proposed the use of Hidden Markov Models (HMMs)\cite{elmezain2008hidden, terven2014robust}.
+Another method for predicting Semaphoric gestures from a sequence, is to use Hidden Markov Models (HMMs)\cite{elmezain2008hidden, terven2014robust}.
 A HMM describes the possible hidden states a system can be in, the probabilities/rules for transitioning from one state to another, the sates that can be observed, and the probability that a given observation arises from each hidden state.
 For example, the HMM employed by \citeauthor{elmezain2008hidden}\cite{elmezain2008hidden} has the gestures as its hidden states, in this case arabic numbers, with the possible observations being a quantised direction\footnote{To reduce the possible observation space, the angles from 0\textdegree to 360\textdegree are bucketed into a range of 0 to 18} that the user's hand travelled, captured via a camera. The probabilities of the sequence of observations would be observed for a given number drawn by the user can then be trained.
 
