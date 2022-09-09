@@ -190,3 +190,14 @@ By using a face detector~\cite{yu2022yunet} with OpenCV we were able to generate
 From the table we can see that some gestures have much lower frequency of frames wherein the head is detected. Most of these are to be expected, such as the gestures that rotate the phone, which can cause the camera's point of view to no longer include the face. A particular example is the Bottom-Centre variant of the Pointing-Rotate-Phone gesture, which involves the phone being tilted such that the top of the phone is tilted away from the participant's face. Given the front-facing camera is mounted on the top, this will result in the camera moving the furthest from the face.
 
 On average all the gestures took between 2.4 - 3.6 seconds, with the circular and zoom motions, for both head and phone, taking the longest to perform.
+
+\subsection{Data Synchronisation and Post-Processing}
+Before being able to use the data for training, we needed to synchronise the data recorded from the smartphone, and the fbx data from the MoCap studio.
+To do this we derived the acceleration of the phone based on the MoCap data to find where it meets/exceeds the magnitude of the shake recorded by the app. From this we can determine the frame of the fbx data that corresponds to the recorded timestamp. We can determine the frame for any subsequent timestamp based on the known frame-rate of 60fps. 
+To verify the data didn't drift we resync the data based on the other 2 recorded shakes, verifying that they're within 10 frames of the expected frame. In doing this verification, we did not come across any recording wherein subsequent shakes were not found to be at the expected frame.
+The synchronisation was performed with a Python script that was run within Blender after loading in the fbx.
+Blender was used as it permitted viewing the fbx data so that we could verify the frames the shake was detected by watching the playback. We could also use Blender to verify the derived location, roll, pitch, and yaw were correct by inserting a plane into the scene and assigning it the derived values, checking that it lined-up through all of the motion trackers.
+The other reason for using Blender is that it allowed us to programmatically access the fbx file as a data structure and therefore write a script capable of deriving the required head and phone poses from the fbx, and then sync it with the data recorded from the phone.
+Synchronised data was exported to CSVs for each motion recording, containing a path to the image, the raw IMU data, and the derived MoCap data.
+
+An additional stage of pre-processing that was performed was to generate the RGB images from the YUV data captured by the phone. This was performed with a Python script and the OpenCV library.

@@ -1,15 +1,35 @@
 \section{Discussion} % < 1 Page
+Reviewing the results from the evaluation of our gesture classifier we observe under-fitting.
+We can see from the loss and accuracy graphs (\autoref{fig:motion_encoder_acc}) that the model did not appear to learn, besides a small increase in accuracy for classifying the motion observed in the linear axes for the head and phone.
+It also started with a very high accuracy for predicting the rotational motion, and the height of the head in the Z axis.
+This was of course great to see, until we noticed the lack of learning. Viewing the confusion matrix for the model (\autoref{fig:motion_encoder_cm}), we can see the why: the model did not need to learn as guessing stationary for the motion in a given axis was correct most of the time.
+As such the calculated loss was heavily skewed by the rotational predictions. In an attempt to combat this retrained the model with loss weights to prioritise the loss of the linear axis 50-fold. unfortunately this did not lead to negligable improvement.
+
+The gesture classifier on the other hand actually performed relatively well, though it also seemed to have some under-fitting.
+The confusion matrix (\autoref{fig:motion_encoder_cm}) best shows what we believe to be the cause of the under-fitting, the presence of many stationary 
+
+
 % How did models perform, what motions / gestures were difficult
 % Which model performed best
+
+% motion encoder suggests angular motion could be learned
+% linear motion however seemed less predictable. Better than random, but not great.
+% didn't seem to learn, only minor improvements in phone and head linear.
+
+% this seems to be down to having too many sources of stationary movement as input, as such it is accurate for the model to predict stationary for rotation in most cases...
+% As such the loss was already low from 
+% Tried rerunning with weighting applied to output loss, such that loss of linear motion was prioritised 50-fold, however training resulted in same performance.
+% Could be model under-fitting, or an issue with data imbalance within the training data, since majority of gestures recorded have some frames of participants being stationary in some degrees of movement. As such most samples contain no movement in several degrees of freedom.
+Comparing the results for the two models, you can clearly observe the gesture classifier having greater performance than the motion encoder.
+This is most clear within the confusion matrices for the two models (\autoref{fig:motion_encoder_cm}, \autoref{fig:gesture_classifier_cm}), wherein you can observe a much higher true negative and positive sample rate in the gesture classifier.
+This suggests that although the motion encoder was ineffective, the gesture classifier could be promising for distinguishing between head and phone based semaphoric gestures if given correct input.
+% Gesture Classifier started over-fitting from 60\% accuracy, either lack of varied data, or model too complicated?
 
 % What do the results mean?
 % Why might the cause of some of the issues be?
 % Was this a success or failure?
 
-% Performance, how long to run models?
-% How did models perform deployed compared to confusion matrices (did those with bad CM perform better than others?)
-% NN Vs Other methods
-
+% Run time on cpu?
 
 % What do the results mean?
 % Why might the cause of some of the issues be?
@@ -17,14 +37,17 @@
 
 
 \subsection{Limitations and Further Work} % < 0.5 Pages
+% imbalanced data
 % What should be done to improve
-% Collect more data (to improve accuracy)
+% Collect more data (to reduce over-fitting and increase accuracy)
 % no images that do not contain a face (at least no labelled images as such. could use existing Android MLKit tools to cascade and ignore sequences over 20 frames without a head)
 % only trained at 10fps, if gesture takes longer than 2 seconds, could fail to be accurately detected
 
+% Could possibly retrain CNN with MobileNetV2 with weights unfrozen to learn more image features to obtain better performance
+
 % What were the limitations with the data collection / system developed?
 
-% Retrain with different hyper-params ()
+% Retrain with different hyper-params (more dropout)
 
 
 % Further work
